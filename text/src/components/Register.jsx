@@ -1,45 +1,49 @@
-import React,{useState} from "react";
-
+import React, { useState } from 'react'
 
 const Register = ({ setToggle, setUsers }) => {
-    const [formData, setFormData] = useState({
-        name:"Aman",
-        email:"faiz@hussain.com",
-        url:"",
-        password:""
-    });
+
+  const [formData, setFormData] = useState({
+    name:"Faiz",
+    email:"faiz@hussain.com",
+    url:"",
+    password:""
+  })
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // setFormData()
+    setUsers((users) => {
+
+      console.log(users);
+      
+      return [...users, formData]
+    })
     
+    setFormData({
+      name:"",
+      email:"",
+      url:"",
+      password:""
+    })
     
-    console.log(formData);
-    
-    // console.log(users)
+    // setToggle((toggle) => !toggle )
+  }
+   console.log(formData);
+   
+   
+   
 
-    const handleChange = (e) => {
-        let { name, value } = e.target;
-        setFormData({...formData, [name]:value });
-    };
-
-    const handleSubmit = (e) =>{
-        e.preventDefault();
-        // console.log(formData);
-        // set functions are async function
-        setUsers((prev) => [...prev, formData])
-
-        // make input empty after submit click 
-        setFormData({
-          name:"",
-          email:"",
-          url:"",
-          password:""
-        })
-
-        setToggle((prev) => !prev)
-
-        
-    };
+ const handleChange =(e)=>{
+  let  { name, value } = e.target
+  setFormData({...formData, [name]:value })
+  console.log(formData);
+  
+  
+  
+ }
 
   return (
-     <div className='flex w-90 flex-col rounded-xl bg-slate-100 p-6 shadow-xl'>
+    <div className='flex w-90 flex-col rounded-xl bg-slate-100 p-6 shadow-xl'>
       <form 
         onSubmit={handleSubmit}
         className='flex flex-col gap-4'>
@@ -92,7 +96,7 @@ const Register = ({ setToggle, setUsers }) => {
         >Login here</span>
       </p>
     </div>
-  );
+  )
 }
 
 export default Register
