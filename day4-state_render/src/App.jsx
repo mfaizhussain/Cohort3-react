@@ -81,9 +81,9 @@ const App = () => {
 
 const deleteProduct = (id) => {
   
-  let products = productData.filter((ele) => ele.id !== id)
+  // let products = productData.filter((ele) => ele.name !== name)
   console.log("delete", products);
-  setProductData(products)
+  setProductData((prev) => prev.filter((ele) => ele.id !== id))
   
 }
   console.log("App");

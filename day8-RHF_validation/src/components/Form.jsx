@@ -1,16 +1,34 @@
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-const Form = ({ setToggle, setUsers }) => {
+import { set, useForm } from 'react-hook-form'
+const Form = ({ setToggle, setUsers , 
+    editIndex, editUser, setEditIndex, setEditUser }) => {
 
+
+    //  console.log(editUser, editIndex);
+     
     
-    let { register, handleSubmit, formState: { errors } } = useForm({mode: "onChange"})
+    let { register, handleSubmit, formState: { errors } } = useForm({mode: "onChange",defaultValues
+    : editUser || {
+        name: "",
+        email: "",
+        contact: "",
+        image: ""
+    }})
 
    const formSubmit = (data) => {
-    console.log(data)
-    setUsers(prev => [...prev, data])
+
+    if(editIndex !== null){
+        setUsers(prev => prev.map((user, index) => index === editIndex ? data : user))
+        setEditIndex(null)
+        setEditUser(null)
+    }else{
+        
+        console.log(data)
+        setUsers(prev => [...prev, data])
+    }
     // console.log(user);
     
-    setToggle(prev => !prev)
+    setToggle(true)
    }
     console.log(errors);
     
@@ -48,6 +66,10 @@ const Form = ({ setToggle, setUsers }) => {
             maxLength: {
                 value: 10,
                 message: "Contact must be 10 digits"
+            },
+            pattern: {
+                value: /^[0-9]+$/,
+                message: "Contact must be a number"
             }
         })}
         className='border-2 p-2 border-gray-500 rounded'
