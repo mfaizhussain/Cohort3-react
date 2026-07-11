@@ -1,30 +1,29 @@
 import React, { useState } from 'react'
-import { set, useForm } from 'react-hook-form'
-const Form = ({ setToggle, setUsers , 
-    editIndex, editUser, setEditIndex, setEditUser }) => {
+import { useForm } from 'react-hook-form'
+import { nanoid } from 'nanoid'
 
+const Form = ({ setToggle, setUsers ,  users , updatedUser, setUpdatedUser }) => {
 
+  console.log("updatedUser", updatedUser);
     //  console.log(editUser, editIndex);
-     
-    
-    let { register, handleSubmit, formState: { errors } } = useForm({mode: "onChange",defaultValues
-    : editUser || {
-        name: "",
-        email: "",
-        contact: "",
-        image: ""
-    }})
+    let { register, handleSubmit, formState: { errors } } = useForm({mode: "onChange",
+        defaultValues: updatedUser,
+    })
 
    const formSubmit = (data) => {
 
-    if(editIndex !== null){
-        setUsers(prev => prev.map((user, index) => index === editIndex ? data : user))
-        setEditIndex(null)
-        setEditUser(null)
-    }else{
+
+    if(updatedUser){
+        const updatedUsers = users.map((user) => user.id === updatedUser.id ? data : user)
+        setUsers(updatedUsers)
+        localStorage.setItem("users", JSON.stringify(updatedUsers))
+        setUpdatedUser(null)
+    }else{ 
         
         console.log(data)
-        setUsers(prev => [...prev, data])
+        let arr = [...users, {...data, id: nanoid()}]
+        setUsers(arr)
+        localStorage.setItem("users", JSON.stringify(arr))
     }
     // console.log(user);
     
@@ -55,7 +54,7 @@ const Form = ({ setToggle, setUsers ,
             })}
         className='border-2 p-2 border-gray-500 rounded'
         type="email" placeholder='Email' />
-        { errors.email && <p className='text-red-500'>{errors.email.message}</p> }
+         <p className='text-red-500'>{errors.email?.message}</p> 
         <input
         {...register("contact", {
             required: "Contact is required", 

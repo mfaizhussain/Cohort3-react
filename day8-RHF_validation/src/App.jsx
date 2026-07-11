@@ -6,14 +6,29 @@ import './App.css'
 
 function App() {
   // const [count, setCount] = useState(0)
-  const [users, setUsers] = useState([])
-  const [toggle, setToggle] = useState(false)
-  const [editIndex, setEditIndex] = useState(null)
-  const [editUser, setEditUser] = useState(null)
 
+  
 
-  const del = (index) => {
-    setUsers(prev => prev.filter((user, i) => i !== index))
+  const [users, setUsers] = useState(() =>{
+    return JSON.parse(localStorage.getItem("users")) || []
+  })
+
+  const [toggle, setToggle] = useState(true)
+  const [updatedUser, setUpdatedUser] = useState(null)
+
+  
+  // localStorage.setItem("users", JSON.stringify(users))
+   console.log(updatedUser);
+   
+  
+  
+
+  const del = (id) => {
+    const updatedUsers = users.filter((user) =>  user.id !== id)
+    setUsers(updatedUsers)
+    localStorage.setItem("users", JSON.stringify(updatedUsers))
+    //
+    // setUsers(prev => prev.filter((user, i) => i !== index))
   }
 
   console.log(users);
@@ -23,17 +38,15 @@ function App() {
     <div className='p-3 flex gap-4 flex-col max-h-screen'>
       <Navbar setToggle={setToggle} />
       {toggle ? (
-        <div className='flex justify-center gap-4 items-center'>
+        <div className='flex flex-wrap justify-center gap-4 items-center'>
           { users.map((user, index) => (
             <UserCard 
-            key={index} 
+            key={user.id} 
             index={index} 
             user={user} 
-            setToggle={setToggle} 
-            setUsers={setUsers} 
+            setToggle={setToggle}  
             del={del}
-            setEditIndex={setEditIndex}
-            setEditUser={setEditUser} />
+            setUpdatedUser={setUpdatedUser} />
           )) }
         </div>
       ) : (
@@ -41,10 +54,11 @@ function App() {
           <Form 
           setToggle={setToggle} 
           setUsers={setUsers} 
-          editIndex={editIndex}
-          editUser={editUser}
-          setEditIndex={setEditIndex}
-          setEditUser={setEditUser}
+          
+          users={users}
+          
+          updatedUser={updatedUser}
+          setUpdatedUser={setUpdatedUser}
           />
         </div>
       )}
